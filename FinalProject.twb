@@ -497,6 +497,12 @@
       <column caption='Storm Type' datatype='string' name='[Calculation_2206763863480147977]' role='dimension' type='nominal'>
         <calculation class='tableau' formula='if [Maximum Wind] &gt;= 115 then Replace([Calculation_2206763863471906823], &quot;Hurricane&quot;, &quot;Major Hurricane&quot;)&#13;&#10;else Replace([Calculation_2206763863471906823], [Calculation_2206763863471906823], [Calculation_2206763863471906823]) END' />
       </column>
+      <column aggregation='Sum' caption='Year' datatype='integer' name='[Calculation_2206763863542665231]' role='dimension' type='ordinal'>
+        <calculation class='tableau' formula='DATEPART(&apos;year&apos;,[Date])' />
+      </column>
+      <column aggregation='Sum' caption='Decade' datatype='integer' name='[Calculation_2206763863542853648]' role='dimension' type='ordinal'>
+        <calculation class='tableau' formula='[Calculation_2206763863542665231] - ([Calculation_2206763863542665231]%10)' />
+      </column>
       <column aggregation='CountD' caption='ID (copy)' datatype='string' default-role='measure' default-type='quantitative' name='[ID (copy)_2206763863199985669]' role='dimension' type='nominal'>
         <calculation class='tableau' formula='[ID]' />
       </column>
@@ -5971,12 +5977,14 @@
         <field-sort-custom-order field='ID (copy)_2206763863199985669' />
         <field-sort-custom-order field='Name' />
         <field-sort-custom-order field='Date' />
+        <field-sort-custom-order field='Calculation_2206763863542665231' />
         <field-sort-custom-order field='Time' />
         <field-sort-custom-order field='Event' />
         <field-sort-custom-order field='Status' />
         <field-sort-custom-order field='Calculation_2206763863479361544' />
         <field-sort-custom-order field='Calculation_2206763863471906823' />
         <field-sort-custom-order field='Calculation_2206763863480147977' />
+        <field-sort-custom-order field='Calculation_2206763863542853648' />
         <field-sort-custom-order field='Storm Type (copy)_2206763863484612619' />
         <field-sort-custom-order field='Calculation_2206763863484125194' />
         <field-sort-custom-order field='Status (copy)_2206763863471075334' />
@@ -6628,8 +6636,8 @@
         <devicelayout auto-generated='true' name='Phone'>
           <size maxheight='1450' minheight='1450' sizing-mode='vscroll' />
           <zones>
-            <zone h='100000' id='33' type-v2='layout-basic' w='100000' x='0' y='0'>
-              <zone h='98858' id='32' param='vert' type-v2='layout-flow' w='98934' x='533' y='571'>
+            <zone h='100000' id='39' type-v2='layout-basic' w='100000' x='0' y='0'>
+              <zone h='98858' id='38' param='vert' type-v2='layout-flow' w='98934' x='533' y='571'>
                 <zone h='3000' id='19' type-v2='title' w='98934' x='533' y='571'>
                   <zone-style>
                     <format attr='border-color' value='#000000' />
@@ -6717,7 +6725,7 @@
     </dashboard>
   </dashboards>
   <windows source-height='51'>
-    <window class='worksheet' name='Tropical Cyclone Paths'>
+    <window class='worksheet' maximized='true' name='Tropical Cyclone Paths'>
       <cards>
         <edge name='left'>
           <strip size='160'>
@@ -6836,7 +6844,7 @@
       </viewpoint>
       <simple-id uuid='{AE030E3D-2827-498B-8F6F-EDBDCF8DEC07}' />
     </window>
-    <window class='dashboard' maximized='true' name='Tropical Cyclone Activity and Global Average Temperature'>
+    <window class='dashboard' name='Tropical Cyclone Activity and Global Average Temperature'>
       <viewpoints>
         <viewpoint name='Atlantic Tropical Cyclone Totals'>
           <zoom type='entire-view' />

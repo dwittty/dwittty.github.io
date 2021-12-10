@@ -17,6 +17,7 @@
     <SheetIdentifierTracking />
     <SortTagCleanup />
     <WindowsPersistSimpleIdentifiers />
+    <WorksheetBackgroundTransparency />
     <ZoneBackgroundTransparency />
   </document-format-change-manifest>
   <repository-location id='GlobalTemperaturesAndAtlanticTropicalCycloneActivity' path='/workbooks' revision='1.1' />
@@ -682,7 +683,7 @@
       <column caption='Decade' datatype='date' datatype-customized='true' name='[Calculation_2206763863542853648]' role='dimension' type='ordinal'>
         <calculation class='tableau' formula='DATE(DATEPARSE ( &quot;yyyy&quot;, STR([Calculation_2206763863542665231] - ([Calculation_2206763863542665231]%10)) )) ' />
       </column>
-      <column caption='Avg Yearly Land and Ocean Temperature' datatype='real' datatype-customized='true' name='[Calculation_2206763863550767123]' role='measure' type='quantitative'>
+      <column caption='Avg Yearly Land and Ocean Temperature (°C)' datatype='real' datatype-customized='true' name='[Calculation_2206763863550767123]' role='measure' type='quantitative'>
         <calculation class='tableau' formula='AVG({INCLUDE DATETRUNC(&apos;year&apos;,[Date]):AVG([Calculation_2206763863563276312])})' />
       </column>
       <column caption='Year_temperatures' datatype='integer' name='[Calculation_2206763863553830932]' role='measure' type='quantitative'>
@@ -709,8 +710,11 @@
       <column caption='LowerConfidence' datatype='real' name='[Calculation_2206763863892963361]' role='measure' type='quantitative'>
         <calculation class='tableau' formula='[Calculation_2206763863550767123] - [Calculation_2206763863892316191]' />
       </column>
-      <column caption='Uncertainty Band' datatype='real' name='[Calculation_2206763863894310946]' role='measure' type='quantitative'>
+      <column caption='Uncertainty (°C)' datatype='real' name='[Calculation_2206763863894310946]' role='measure' type='quantitative'>
         <calculation class='tableau' formula='[Calculation_2206763863891836957]-[Calculation_2206763863892963361]' />
+      </column>
+      <column caption='Date Label' datatype='string' name='[Calculation_2206763865435439139]' role='dimension' type='nominal'>
+        <calculation class='tableau' formula='IF [Parameters].[Parameter 1] = &apos;Year&apos; THEN &apos;Year&apos; ElSE &apos;Decade&apos; END' />
       </column>
       <column datatype='date' name='[Date]' role='dimension' type='ordinal' />
       <column aggregation='CountD' caption='ID (copy)' datatype='string' default-role='measure' default-type='quantitative' name='[ID (copy)_2206763863199985669]' role='dimension' type='nominal'>
@@ -7244,18 +7248,18 @@
     </action>
     <action caption='Filter 1 (generated)' name='[Action2_01CB613EA06043C0BBE477BF47D77699]'>
       <activation auto-clear='true' type='on-select' />
-      <source dashboard='Tropical Cyclone Activity and Global Average Temperature' type='sheet' worksheet='Tropical Cyclone Paths' />
+      <source dashboard='Atlantic Basin Tropical Cyclone Activity and Global Average Temperature' type='sheet' worksheet='Tropical Cyclone Paths' />
       <command command='tsc:tsl-filter'>
         <param name='special-fields' value='all' />
-        <param name='target' value='Tropical Cyclone Activity and Global Average Temperature' />
+        <param name='target' value='Atlantic Basin Tropical Cyclone Activity and Global Average Temperature' />
       </command>
     </action>
     <action caption='Filter 2 (generated)' name='[Action3_FD9A6EE8757C493DA190A63D96650985]'>
       <activation auto-clear='true' type='on-select' />
-      <source dashboard='Tropical Cyclone Activity and Global Average Temperature' type='sheet' worksheet='Atlantic Tropical Cyclone Totals' />
+      <source dashboard='Atlantic Basin Tropical Cyclone Activity and Global Average Temperature' type='sheet' worksheet='Atlantic Tropical Cyclone Totals' />
       <command command='tsc:tsl-filter'>
         <param name='special-fields' value='all' />
-        <param name='target' value='Tropical Cyclone Activity and Global Average Temperature' />
+        <param name='target' value='Atlantic Basin Tropical Cyclone Activity and Global Average Temperature' />
       </command>
     </action>
   </actions>
@@ -7335,6 +7339,10 @@
           </style-rule>
           <style-rule element='label'>
             <format attr='text-orientation' field='[federated.00kpo2h0j5nur81d3kcmb1ac3m4j].[none:Calculation_2206763863869825050:ok]' value='-90' />
+            <format attr='display' field='[federated.00kpo2h0j5nur81d3kcmb1ac3m4j].[none:Calculation_2206763863869825050:ok]' value='true' />
+          </style-rule>
+          <style-rule element='worksheet'>
+            <format attr='display-field-labels' scope='cols' value='false' />
           </style-rule>
           <style-rule element='quick-filter'>
             <format attr='title' field='[federated.00kpo2h0j5nur81d3kcmb1ac3m4j].[tyr:Date:qk]' value='Date Range'>
@@ -7384,6 +7392,168 @@
       </table>
       <simple-id uuid='{F3DB4684-E3E2-4BB7-80A7-838C9A7E01C6}' />
     </worksheet>
+    <worksheet name='Dynamic Date Label'>
+      <layout-options>
+        <title>
+          <formatted-text>
+            <run>Dynamic Date Label</run>
+          </formatted-text>
+        </title>
+      </layout-options>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='atlantic (atlantic)' name='federated.00kpo2h0j5nur81d3kcmb1ac3m4j' />
+            <datasource name='Parameters' />
+          </datasources>
+          <datasource-dependencies datasource='Parameters'>
+            <column caption='Date Level Selector' datatype='string' datatype-customized='true' name='[Parameter 1]' param-domain-type='list' role='measure' type='nominal' value='&quot;Year&quot;'>
+              <calculation class='tableau' formula='&quot;Year&quot;' />
+            </column>
+          </datasource-dependencies>
+          <datasource-dependencies datasource='federated.00kpo2h0j5nur81d3kcmb1ac3m4j'>
+            <column aggregation='Sum' caption='Year' datatype='integer' name='[Calculation_2206763863542665231]' role='dimension' type='ordinal'>
+              <calculation class='tableau' formula='DATEPART(&apos;year&apos;,[Date])' />
+            </column>
+            <column caption='Decade' datatype='date' datatype-customized='true' name='[Calculation_2206763863542853648]' role='dimension' type='ordinal'>
+              <calculation class='tableau' formula='DATE(DATEPARSE ( &quot;yyyy&quot;, STR([Calculation_2206763863542665231] - ([Calculation_2206763863542665231]%10)) )) ' />
+            </column>
+            <column caption='Date Selector' datatype='integer' name='[Calculation_2206763863869825050]' role='dimension' type='ordinal'>
+              <calculation class='tableau' formula='CASE [Parameters].[Parameter 1]&#13;&#10;WHEN &quot;Decade&quot; THEN DATEPART(&apos;year&apos;, [Calculation_2206763863542853648])&#13;&#10;WHEN &quot;Year&quot; THEN DATEPART(&apos;year&apos;, [Date])&#13;&#10;END' />
+            </column>
+            <column caption='Date Label' datatype='string' name='[Calculation_2206763865435439139]' role='dimension' type='nominal'>
+              <calculation class='tableau' formula='IF [Parameters].[Parameter 1] = &apos;Year&apos; THEN &apos;Year&apos; ElSE &apos;Decade&apos; END' />
+            </column>
+            <column datatype='date' name='[Date]' role='dimension' type='ordinal' />
+            <column datatype='string' name='[ID]' role='dimension' type='nominal' />
+            <column aggregation='Avg' caption='Latitude Numeric' datatype='real' name='[Latitude_Numeric]' role='measure' semantic-role='[Geographical].[Latitude]' type='quantitative' />
+            <column aggregation='Avg' caption='Longitude Numeric' datatype='real' name='[Longitude_Numeric]' role='measure' semantic-role='[Geographical].[Longitude]' type='quantitative' />
+            <column-instance column='[Calculation_2206763865435439139]' derivation='None' name='[none:Calculation_2206763865435439139:nk]' pivot='key' type='nominal' />
+            <column-instance column='[Latitude_Numeric]' derivation='None' name='[none:Latitude_Numeric:ok]' pivot='key' type='ordinal' />
+            <column-instance column='[Longitude_Numeric]' derivation='None' name='[none:Longitude_Numeric:ok]' pivot='key' type='ordinal' />
+            <column-instance column='[Date]' derivation='Year-Trunc' name='[tyr:Date:qk]' pivot='key' type='quantitative' />
+          </datasource-dependencies>
+          <filter class='categorical' column='[federated.00kpo2h0j5nur81d3kcmb1ac3m4j].[Action (Date Selector)]'>
+            <groupfilter function='level-members' level='[Calculation_2206763863869825050]' user:ui-action-filter='[Action3_FD9A6EE8757C493DA190A63D96650985]' user:ui-enumeration='all' user:ui-marker='enumerate' />
+          </filter>
+          <filter class='categorical' column='[federated.00kpo2h0j5nur81d3kcmb1ac3m4j].[Action (ID,Latitude Numeric,Longitude Numeric)]'>
+            <groupfilter function='crossjoin' user:ui-action-filter='[Action2_01CB613EA06043C0BBE477BF47D77699]' user:ui-enumeration='all' user:ui-marker='enumerate'>
+              <groupfilter function='level-members' level='[ID]' />
+              <groupfilter function='level-members' level='[none:Latitude_Numeric:ok]' />
+              <groupfilter function='level-members' level='[none:Longitude_Numeric:ok]' />
+            </groupfilter>
+          </filter>
+          <slices>
+            <column>[federated.00kpo2h0j5nur81d3kcmb1ac3m4j].[tyr:Date:qk]</column>
+            <column>[federated.00kpo2h0j5nur81d3kcmb1ac3m4j].[Action (Date Selector)]</column>
+            <column>[federated.00kpo2h0j5nur81d3kcmb1ac3m4j].[Action (ID,Latitude Numeric,Longitude Numeric)]</column>
+          </slices>
+          <aggregation value='true' />
+        </view>
+        <style />
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Automatic' />
+            <encodings>
+              <text column='[federated.00kpo2h0j5nur81d3kcmb1ac3m4j].[none:Calculation_2206763865435439139:nk]' />
+            </encodings>
+            <style>
+              <style-rule element='mark'>
+                <format attr='mark-labels-show' value='true' />
+                <format attr='mark-labels-cull' value='true' />
+              </style-rule>
+            </style>
+          </pane>
+        </panes>
+        <rows />
+        <cols />
+      </table>
+      <simple-id uuid='{79FFBC0B-A6F0-409C-BBE1-91DC03CF258C}' />
+    </worksheet>
+    <worksheet name='Dynamic Date Label (2)'>
+      <layout-options>
+        <title>
+          <formatted-text>
+            <run>Dynamic Date Label</run>
+          </formatted-text>
+        </title>
+      </layout-options>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='atlantic (atlantic)' name='federated.00kpo2h0j5nur81d3kcmb1ac3m4j' />
+            <datasource name='Parameters' />
+          </datasources>
+          <datasource-dependencies datasource='Parameters'>
+            <column caption='Date Level Selector' datatype='string' datatype-customized='true' name='[Parameter 1]' param-domain-type='list' role='measure' type='nominal' value='&quot;Year&quot;'>
+              <calculation class='tableau' formula='&quot;Year&quot;' />
+            </column>
+          </datasource-dependencies>
+          <datasource-dependencies datasource='federated.00kpo2h0j5nur81d3kcmb1ac3m4j'>
+            <column aggregation='Sum' caption='Year' datatype='integer' name='[Calculation_2206763863542665231]' role='dimension' type='ordinal'>
+              <calculation class='tableau' formula='DATEPART(&apos;year&apos;,[Date])' />
+            </column>
+            <column caption='Decade' datatype='date' datatype-customized='true' name='[Calculation_2206763863542853648]' role='dimension' type='ordinal'>
+              <calculation class='tableau' formula='DATE(DATEPARSE ( &quot;yyyy&quot;, STR([Calculation_2206763863542665231] - ([Calculation_2206763863542665231]%10)) )) ' />
+            </column>
+            <column caption='Date Selector' datatype='integer' name='[Calculation_2206763863869825050]' role='dimension' type='ordinal'>
+              <calculation class='tableau' formula='CASE [Parameters].[Parameter 1]&#13;&#10;WHEN &quot;Decade&quot; THEN DATEPART(&apos;year&apos;, [Calculation_2206763863542853648])&#13;&#10;WHEN &quot;Year&quot; THEN DATEPART(&apos;year&apos;, [Date])&#13;&#10;END' />
+            </column>
+            <column caption='Date Label' datatype='string' name='[Calculation_2206763865435439139]' role='dimension' type='nominal'>
+              <calculation class='tableau' formula='IF [Parameters].[Parameter 1] = &apos;Year&apos; THEN &apos;Year&apos; ElSE &apos;Decade&apos; END' />
+            </column>
+            <column datatype='date' name='[Date]' role='dimension' type='ordinal' />
+            <column datatype='string' name='[ID]' role='dimension' type='nominal' />
+            <column aggregation='Avg' caption='Latitude Numeric' datatype='real' name='[Latitude_Numeric]' role='measure' semantic-role='[Geographical].[Latitude]' type='quantitative' />
+            <column aggregation='Avg' caption='Longitude Numeric' datatype='real' name='[Longitude_Numeric]' role='measure' semantic-role='[Geographical].[Longitude]' type='quantitative' />
+            <column-instance column='[Calculation_2206763865435439139]' derivation='None' name='[none:Calculation_2206763865435439139:nk]' pivot='key' type='nominal' />
+            <column-instance column='[Latitude_Numeric]' derivation='None' name='[none:Latitude_Numeric:ok]' pivot='key' type='ordinal' />
+            <column-instance column='[Longitude_Numeric]' derivation='None' name='[none:Longitude_Numeric:ok]' pivot='key' type='ordinal' />
+            <column-instance column='[Date]' derivation='Year-Trunc' name='[tyr:Date:qk]' pivot='key' type='quantitative' />
+          </datasource-dependencies>
+          <filter class='categorical' column='[federated.00kpo2h0j5nur81d3kcmb1ac3m4j].[Action (Date Selector)]'>
+            <groupfilter function='level-members' level='[Calculation_2206763863869825050]' user:ui-action-filter='[Action3_FD9A6EE8757C493DA190A63D96650985]' user:ui-enumeration='all' user:ui-marker='enumerate' />
+          </filter>
+          <filter class='categorical' column='[federated.00kpo2h0j5nur81d3kcmb1ac3m4j].[Action (ID,Latitude Numeric,Longitude Numeric)]'>
+            <groupfilter function='crossjoin' user:ui-action-filter='[Action2_01CB613EA06043C0BBE477BF47D77699]' user:ui-enumeration='all' user:ui-marker='enumerate'>
+              <groupfilter function='level-members' level='[ID]' />
+              <groupfilter function='level-members' level='[none:Latitude_Numeric:ok]' />
+              <groupfilter function='level-members' level='[none:Longitude_Numeric:ok]' />
+            </groupfilter>
+          </filter>
+          <slices>
+            <column>[federated.00kpo2h0j5nur81d3kcmb1ac3m4j].[tyr:Date:qk]</column>
+            <column>[federated.00kpo2h0j5nur81d3kcmb1ac3m4j].[Action (Date Selector)]</column>
+            <column>[federated.00kpo2h0j5nur81d3kcmb1ac3m4j].[Action (ID,Latitude Numeric,Longitude Numeric)]</column>
+          </slices>
+          <aggregation value='true' />
+        </view>
+        <style />
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Automatic' />
+            <encodings>
+              <text column='[federated.00kpo2h0j5nur81d3kcmb1ac3m4j].[none:Calculation_2206763865435439139:nk]' />
+            </encodings>
+            <style>
+              <style-rule element='mark'>
+                <format attr='mark-labels-show' value='true' />
+                <format attr='mark-labels-cull' value='true' />
+              </style-rule>
+            </style>
+          </pane>
+        </panes>
+        <rows />
+        <cols />
+      </table>
+      <simple-id uuid='{9480D82B-078C-4E0B-8B6F-12D740A9D68E}' />
+    </worksheet>
     <worksheet name='Global Yearly Average Temperature'>
       <table>
         <view>
@@ -7403,7 +7573,7 @@
             <column caption='Decade' datatype='date' datatype-customized='true' name='[Calculation_2206763863542853648]' role='dimension' type='ordinal'>
               <calculation class='tableau' formula='DATE(DATEPARSE ( &quot;yyyy&quot;, STR([Calculation_2206763863542665231] - ([Calculation_2206763863542665231]%10)) )) ' />
             </column>
-            <column caption='Avg Yearly Land and Ocean Temperature' datatype='real' datatype-customized='true' name='[Calculation_2206763863550767123]' role='measure' type='quantitative'>
+            <column caption='Avg Yearly Land and Ocean Temperature (°C)' datatype='real' datatype-customized='true' name='[Calculation_2206763863550767123]' role='measure' type='quantitative'>
               <calculation class='tableau' formula='AVG({INCLUDE DATETRUNC(&apos;year&apos;,[Date]):AVG([Calculation_2206763863563276312])})' />
             </column>
             <column caption='LandOceanAvgTemp' datatype='real' name='[Calculation_2206763863563276312]' role='measure' type='quantitative'>
@@ -7421,7 +7591,7 @@
             <column caption='LowerConfidence' datatype='real' name='[Calculation_2206763863892963361]' role='measure' type='quantitative'>
               <calculation class='tableau' formula='[Calculation_2206763863550767123] - [Calculation_2206763863892316191]' />
             </column>
-            <column caption='Uncertainty Band' datatype='real' name='[Calculation_2206763863894310946]' role='measure' type='quantitative'>
+            <column caption='Uncertainty (°C)' datatype='real' name='[Calculation_2206763863894310946]' role='measure' type='quantitative'>
               <calculation class='tableau' formula='[Calculation_2206763863891836957]-[Calculation_2206763863892963361]' />
             </column>
             <column datatype='date' name='[Date]' role='dimension' type='ordinal' />
@@ -7481,6 +7651,9 @@
             <encoding attr='space' class='0' domain-expand='false' field='[federated.00kpo2h0j5nur81d3kcmb1ac3m4j].[usr:Calculation_2206763863550767123:qk]' field-type='quantitative' scope='rows' type='space' />
             <format attr='display' class='0' field='[federated.00kpo2h0j5nur81d3kcmb1ac3m4j].[Multiple Values]' scope='rows' value='false' />
           </style-rule>
+          <style-rule element='worksheet'>
+            <format attr='display-field-labels' scope='cols' value='false' />
+          </style-rule>
         </style>
         <panes>
           <pane id='16' selection-relaxation-option='selection-relaxation-allow'>
@@ -7491,6 +7664,18 @@
             <encodings>
               <color column='[federated.00kpo2h0j5nur81d3kcmb1ac3m4j].[:Measure Names]' />
             </encodings>
+            <customized-tooltip>
+              <formatted-text>
+                <run fontcolor='#787878'>Date Selector:&#9;</run>
+                <run bold='true'><![CDATA[<[federated.00kpo2h0j5nur81d3kcmb1ac3m4j].[none:Calculation_2206763863869825050:ok]>]]></run>
+                <run>Æ&#10;</run>
+                <run fontcolor='#787878'>Avg Yearly Land and Ocean Temperature:	</run>
+                <run bold='true'><![CDATA[<[federated.00kpo2h0j5nur81d3kcmb1ac3m4j].[usr:Calculation_2206763863550767123:qk]>]]></run>
+                <run>Æ&#10;</run>
+                <run fontcolor='#787878'><![CDATA[<[federated.00kpo2h0j5nur81d3kcmb1ac3m4j].[:Measure Names]>:	]]></run>
+                <run bold='true'><![CDATA[<[federated.00kpo2h0j5nur81d3kcmb1ac3m4j].[Multiple Values]>]]></run>
+              </formatted-text>
+            </customized-tooltip>
             <style>
               <style-rule element='mark'>
                 <format attr='mark-color' value='#4e79a7' />
@@ -7506,6 +7691,18 @@
             <encodings>
               <color column='[federated.00kpo2h0j5nur81d3kcmb1ac3m4j].[:Measure Names]' />
             </encodings>
+            <customized-tooltip>
+              <formatted-text>
+                <run fontcolor='#787878'>Date Selector:&#9;</run>
+                <run bold='true'><![CDATA[<[federated.00kpo2h0j5nur81d3kcmb1ac3m4j].[none:Calculation_2206763863869825050:ok]>]]></run>
+                <run>Æ&#10;</run>
+                <run fontcolor='#787878'>Avg Yearly Land and Ocean Temperature:	</run>
+                <run bold='true'><![CDATA[<[federated.00kpo2h0j5nur81d3kcmb1ac3m4j].[usr:Calculation_2206763863550767123:qk]>]]></run>
+                <run>Æ&#10;</run>
+                <run fontcolor='#787878'><![CDATA[<[federated.00kpo2h0j5nur81d3kcmb1ac3m4j].[:Measure Names]>:	]]></run>
+                <run bold='true'><![CDATA[<[federated.00kpo2h0j5nur81d3kcmb1ac3m4j].[Multiple Values]>]]></run>
+              </formatted-text>
+            </customized-tooltip>
             <style>
               <style-rule element='mark'>
                 <format attr='mark-color' value='#4e79a7' />
@@ -7521,6 +7718,18 @@
             <encodings>
               <color column='[federated.00kpo2h0j5nur81d3kcmb1ac3m4j].[:Measure Names]' />
             </encodings>
+            <customized-tooltip>
+              <formatted-text>
+                <run fontcolor='#787878'>Date Selector:&#9;</run>
+                <run bold='true'><![CDATA[<[federated.00kpo2h0j5nur81d3kcmb1ac3m4j].[none:Calculation_2206763863869825050:ok]>]]></run>
+                <run>Æ&#10;</run>
+                <run fontcolor='#787878'>Avg Yearly Land and Ocean Temperature:	</run>
+                <run bold='true'><![CDATA[<[federated.00kpo2h0j5nur81d3kcmb1ac3m4j].[usr:Calculation_2206763863550767123:qk]>]]></run>
+                <run>Æ&#10;</run>
+                <run fontcolor='#787878'><![CDATA[<[federated.00kpo2h0j5nur81d3kcmb1ac3m4j].[:Measure Names]>:	]]></run>
+                <run bold='true'><![CDATA[<[federated.00kpo2h0j5nur81d3kcmb1ac3m4j].[Multiple Values]>]]></run>
+              </formatted-text>
+            </customized-tooltip>
             <style>
               <style-rule element='mark'>
                 <format attr='mark-color' value='#4e79a7' />
@@ -7620,7 +7829,7 @@
     </worksheet>
   </worksheets>
   <dashboards>
-    <dashboard _.fcp.AccessibleZoneTabOrder.true...enable-sort-zone-taborder='true' name='Tropical Cyclone Activity and Global Average Temperature'>
+    <dashboard _.fcp.AccessibleZoneTabOrder.true...enable-sort-zone-taborder='true' name='Atlantic Basin Tropical Cyclone Activity and Global Average Temperature'>
       <style />
       <size maxheight='1400' maxwidth='1500' minheight='1400' minwidth='1500' sizing-mode='fixed' />
       <datasources>
@@ -7728,6 +7937,8 @@
             <format attr='margin' value='8' />
           </zone-style>
         </zone>
+        <zone h='21500' id='65' name='Dynamic Date Label' show-title='false' w='33333' x='62067' y='24714' />
+        <zone h='21500' id='66' name='Dynamic Date Label (2)' show-title='false' w='33333' x='62200' y='49714' />
       </zones>
       <devicelayouts>
         <devicelayout auto-generated='true' name='Phone'>
@@ -7853,13 +8064,14 @@
       </cards>
       <simple-id uuid='{4D9D297C-95B5-4113-B412-3B2F32715CD5}' />
     </window>
-    <window class='worksheet' maximized='true' name='Global Yearly Average Temperature'>
+    <window class='worksheet' name='Global Yearly Average Temperature'>
       <cards>
         <edge name='left'>
           <strip size='160'>
             <card type='pages' />
             <card type='filters' />
             <card type='measures' />
+            <card type='marks' />
           </strip>
         </edge>
         <edge name='top'>
@@ -7916,10 +8128,16 @@
       </cards>
       <simple-id uuid='{AE030E3D-2827-498B-8F6F-EDBDCF8DEC07}' />
     </window>
-    <window class='dashboard' name='Tropical Cyclone Activity and Global Average Temperature'>
+    <window class='dashboard' maximized='true' name='Atlantic Basin Tropical Cyclone Activity and Global Average Temperature'>
       <viewpoints>
         <viewpoint name='Atlantic Tropical Cyclone Totals'>
           <zoom type='entire-view' />
+        </viewpoint>
+        <viewpoint name='Dynamic Date Label'>
+          <zoom type='fit-width' />
+        </viewpoint>
+        <viewpoint name='Dynamic Date Label (2)'>
+          <zoom type='fit-width' />
         </viewpoint>
         <viewpoint name='Global Yearly Average Temperature'>
           <zoom type='entire-view' />
@@ -7930,6 +8148,52 @@
       </viewpoints>
       <active id='58' />
       <simple-id uuid='{D86BED8A-20B9-47CA-B2C2-6AC5F0C3BA54}' />
+    </window>
+    <window class='worksheet' name='Dynamic Date Label'>
+      <cards>
+        <edge name='left'>
+          <strip size='160'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+        </edge>
+      </cards>
+      <viewpoint>
+        <zoom type='fit-width' />
+      </viewpoint>
+      <simple-id uuid='{F3DF54E7-7773-43A2-9699-3E6C942243B1}' />
+    </window>
+    <window class='worksheet' name='Dynamic Date Label (2)'>
+      <cards>
+        <edge name='left'>
+          <strip size='160'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+        </edge>
+      </cards>
+      <viewpoint>
+        <zoom type='fit-width' />
+      </viewpoint>
+      <simple-id uuid='{C80C9BCA-CB46-4353-A420-2D97BACE4B68}' />
     </window>
   </windows>
 </workbook>

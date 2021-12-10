@@ -709,7 +709,7 @@
       <column caption='LowerConfidence' datatype='real' name='[Calculation_2206763863892963361]' role='measure' type='quantitative'>
         <calculation class='tableau' formula='[Calculation_2206763863550767123] - [Calculation_2206763863892316191]' />
       </column>
-      <column caption='Confidence Band' datatype='real' name='[Calculation_2206763863894310946]' role='measure' type='quantitative'>
+      <column caption='Uncertainty Band' datatype='real' name='[Calculation_2206763863894310946]' role='measure' type='quantitative'>
         <calculation class='tableau' formula='[Calculation_2206763863891836957]-[Calculation_2206763863892963361]' />
       </column>
       <column datatype='date' name='[Date]' role='dimension' type='ordinal' />
@@ -733,6 +733,7 @@
       <_.fcp.ObjectModelTableType.true...column caption='GlobalTemperatures' datatype='table' name='[__tableau_internal_object_id__].[GlobalTemperatures_58B947EAB1D5461CBBBE37F49DCFBC9D]' role='measure' type='quantitative' />
       <_.fcp.ObjectModelTableType.true...column caption='atlantic' datatype='table' name='[__tableau_internal_object_id__].[atlantic_D8C4603FF4CE42A782C8741E14583C62]' role='measure' type='quantitative' />
       <column caption='Dt' datatype='datetime' name='[dt]' role='dimension' type='quantitative' />
+      <column-instance column='[Calculation_2206763863879012380]' derivation='None' name='[none:Calculation_2206763863879012380:nk]' pivot='key' type='nominal' />
       <column-instance column='[ID]' derivation='None' name='[none:ID:nk]' pivot='key' type='nominal' />
       <column-instance column='[Latitude_Numeric]' derivation='None' name='[none:Latitude_Numeric:ok]' pivot='key' type='ordinal' />
       <column-instance column='[Longitude_Numeric]' derivation='None' name='[none:Longitude_Numeric:ok]' pivot='key' type='ordinal' />
@@ -6692,6 +6693,16 @@
       <semantic-values>
         <semantic-value key='[Country].[Name]' value='&quot;United States&quot;' />
       </semantic-values>
+      <default-sorts>
+        <manual-sort column='[none:Calculation_2206763863879012380:nk]' direction='ASC'>
+          <dictionary>
+            <bucket>&quot;&lt; Tropical Storm Strength&quot;</bucket>
+            <bucket>&quot;Tropical Storm&quot;</bucket>
+            <bucket>&quot;Hurricane&quot;</bucket>
+            <bucket>&quot;Major Hurricane&quot;</bucket>
+          </dictionary>
+        </manual-sort>
+      </default-sorts>
       <field-sort-info field-sort-order-type='custom-order'>
         <field-sort-custom-order field='ID' />
         <field-sort-custom-order field='ID (copy)_2206763863199985669' />
@@ -7410,7 +7421,7 @@
             <column caption='LowerConfidence' datatype='real' name='[Calculation_2206763863892963361]' role='measure' type='quantitative'>
               <calculation class='tableau' formula='[Calculation_2206763863550767123] - [Calculation_2206763863892316191]' />
             </column>
-            <column caption='Confidence Band' datatype='real' name='[Calculation_2206763863894310946]' role='measure' type='quantitative'>
+            <column caption='Uncertainty Band' datatype='real' name='[Calculation_2206763863894310946]' role='measure' type='quantitative'>
               <calculation class='tableau' formula='[Calculation_2206763863891836957]-[Calculation_2206763863892963361]' />
             </column>
             <column datatype='date' name='[Date]' role='dimension' type='ordinal' />
@@ -7842,7 +7853,7 @@
       </cards>
       <simple-id uuid='{4D9D297C-95B5-4113-B412-3B2F32715CD5}' />
     </window>
-    <window class='worksheet' name='Global Yearly Average Temperature'>
+    <window class='worksheet' maximized='true' name='Global Yearly Average Temperature'>
       <cards>
         <edge name='left'>
           <strip size='160'>
@@ -7905,7 +7916,7 @@
       </cards>
       <simple-id uuid='{AE030E3D-2827-498B-8F6F-EDBDCF8DEC07}' />
     </window>
-    <window class='dashboard' maximized='true' name='Tropical Cyclone Activity and Global Average Temperature'>
+    <window class='dashboard' name='Tropical Cyclone Activity and Global Average Temperature'>
       <viewpoints>
         <viewpoint name='Atlantic Tropical Cyclone Totals'>
           <zoom type='entire-view' />
@@ -7917,7 +7928,7 @@
           <zoom type='entire-view' />
         </viewpoint>
       </viewpoints>
-      <active id='11' />
+      <active id='58' />
       <simple-id uuid='{D86BED8A-20B9-47CA-B2C2-6AC5F0C3BA54}' />
     </window>
   </windows>

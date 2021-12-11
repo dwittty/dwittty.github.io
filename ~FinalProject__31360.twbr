@@ -20,7 +20,7 @@
     <WorksheetBackgroundTransparency />
     <ZoneBackgroundTransparency />
   </document-format-change-manifest>
-  <repository-location id='GlobalTemperaturesAndAtlanticTropicalCycloneActivity' path='/workbooks' revision='1.1' />
+  <repository-location id='GlobalTemperaturesAndAtlanticTropicalCycloneActivity' path='/workbooks' revision='1.2' />
   <preferences>
     <preference name='ui.encoding.shelf.height' value='24' />
     <preference name='ui.shelf.height' value='26' />
@@ -683,7 +683,7 @@
       <column caption='Decade' datatype='date' datatype-customized='true' name='[Calculation_2206763863542853648]' role='dimension' type='ordinal'>
         <calculation class='tableau' formula='DATE(DATEPARSE ( &quot;yyyy&quot;, STR([Calculation_2206763863542665231] - ([Calculation_2206763863542665231]%10)) )) ' />
       </column>
-      <column caption='Avg Yearly Land and Ocean Temperature (°C)' datatype='real' datatype-customized='true' name='[Calculation_2206763863550767123]' role='measure' type='quantitative'>
+      <column caption='Average Land and Ocean Temperature (°C)' datatype='real' datatype-customized='true' name='[Calculation_2206763863550767123]' role='measure' type='quantitative'>
         <calculation class='tableau' formula='AVG({INCLUDE DATETRUNC(&apos;year&apos;,[Date]):AVG([Calculation_2206763863563276312])})' />
       </column>
       <column caption='Year_temperatures' datatype='integer' name='[Calculation_2206763863553830932]' role='measure' type='quantitative'>
@@ -7319,7 +7319,7 @@
             <groupfilter function='level-members' level='[none:Calculation_2206763863869825050:ok]' />
           </filter>
           <filter class='categorical' column='[federated.00kpo2h0j5nur81d3kcmb1ac3m4j].[none:Calculation_2206763863879012380:nk]' filter-group='3'>
-            <groupfilter function='level-members' level='[none:Calculation_2206763863879012380:nk]' user:ui-enumeration='all' user:ui-marker='enumerate' />
+            <groupfilter function='member' level='[none:Calculation_2206763863879012380:nk]' member='&quot;Major Hurricane&quot;' user:ui-domain='relevant' user:ui-enumeration='inclusive' user:ui-marker='enumerate' />
           </filter>
           <slices>
             <column>[federated.00kpo2h0j5nur81d3kcmb1ac3m4j].[tyr:Date:qk]</column>
@@ -7573,7 +7573,7 @@
             <column caption='Decade' datatype='date' datatype-customized='true' name='[Calculation_2206763863542853648]' role='dimension' type='ordinal'>
               <calculation class='tableau' formula='DATE(DATEPARSE ( &quot;yyyy&quot;, STR([Calculation_2206763863542665231] - ([Calculation_2206763863542665231]%10)) )) ' />
             </column>
-            <column caption='Avg Yearly Land and Ocean Temperature (°C)' datatype='real' datatype-customized='true' name='[Calculation_2206763863550767123]' role='measure' type='quantitative'>
+            <column caption='Average Land and Ocean Temperature (°C)' datatype='real' datatype-customized='true' name='[Calculation_2206763863550767123]' role='measure' type='quantitative'>
               <calculation class='tableau' formula='AVG({INCLUDE DATETRUNC(&apos;year&apos;,[Date]):AVG([Calculation_2206763863563276312])})' />
             </column>
             <column caption='LandOceanAvgTemp' datatype='real' name='[Calculation_2206763863563276312]' role='measure' type='quantitative'>
@@ -7790,7 +7790,7 @@
             <groupfilter function='level-members' level='[Calculation_2206763863869825050]' user:ui-action-filter='[Action3_FD9A6EE8757C493DA190A63D96650985]' user:ui-enumeration='all' user:ui-marker='enumerate' />
           </filter>
           <filter class='categorical' column='[federated.00kpo2h0j5nur81d3kcmb1ac3m4j].[none:Calculation_2206763863879012380:nk]' filter-group='3'>
-            <groupfilter function='level-members' level='[none:Calculation_2206763863879012380:nk]' user:ui-enumeration='all' user:ui-marker='enumerate' />
+            <groupfilter function='member' level='[none:Calculation_2206763863879012380:nk]' member='&quot;Major Hurricane&quot;' user:ui-domain='relevant' user:ui-enumeration='inclusive' user:ui-marker='enumerate' />
           </filter>
           <slices>
             <column>[federated.00kpo2h0j5nur81d3kcmb1ac3m4j].[none:Calculation_2206763863879012380:nk]</column>
@@ -7801,8 +7801,8 @@
         </view>
         <style>
           <style-rule element='axis'>
-            <encoding attr='space' class='0' field='[federated.00kpo2h0j5nur81d3kcmb1ac3m4j].[none:Longitude_Numeric:qk]' field-type='quantitative' max='1692427.0724522434' min='-13895224.058496986' projection='EPSG:3857' range-type='fixed' scope='cols' type='space' />
-            <encoding attr='space' class='0' field='[federated.00kpo2h0j5nur81d3kcmb1ac3m4j].[none:Latitude_Numeric:qk]' field-type='quantitative' max='4777916.9969779607' min='-1985538.3286815039' projection='EPSG:3857' range-type='fixed' scope='rows' type='space' />
+            <encoding attr='space' class='0' field='[federated.00kpo2h0j5nur81d3kcmb1ac3m4j].[none:Longitude_Numeric:qk]' field-type='quantitative' max='2940014.0970027074' min='-16195539.644976627' projection='EPSG:3857' range-type='fixed' scope='cols' type='space' />
+            <encoding attr='space' class='0' field='[federated.00kpo2h0j5nur81d3kcmb1ac3m4j].[none:Latitude_Numeric:qk]' field-type='quantitative' max='5785425.5174667556' min='-2517458.7194446782' projection='EPSG:3857' range-type='fixed' scope='rows' type='space' />
           </style-rule>
           <style-rule element='map'>
             <format attr='washout' value='0.0' />
@@ -7942,10 +7942,10 @@
       </zones>
       <devicelayouts>
         <devicelayout auto-generated='true' name='Phone'>
-          <size maxheight='1450' minheight='1450' sizing-mode='vscroll' />
+          <size maxheight='2000' minheight='2000' sizing-mode='vscroll' />
           <zones>
-            <zone h='100000' id='64' type-v2='layout-basic' w='100000' x='0' y='0'>
-              <zone h='98858' id='63' param='vert' type-v2='layout-flow' w='98934' x='533' y='571'>
+            <zone h='100000' id='70' type-v2='layout-basic' w='100000' x='0' y='0'>
+              <zone h='98858' id='69' param='vert' type-v2='layout-flow' w='98934' x='533' y='571'>
                 <zone h='3000' id='19' type-v2='title' w='98934' x='533' y='571'>
                   <zone-style>
                     <format attr='border-color' value='#000000' />
@@ -7994,7 +7994,25 @@
                     <format attr='padding' value='0' />
                   </zone-style>
                 </zone>
+                <zone fixed-size='280' h='21500' id='65' is-fixed='true' name='Dynamic Date Label' show-title='false' w='33333' x='62067' y='24714'>
+                  <zone-style>
+                    <format attr='border-color' value='#000000' />
+                    <format attr='border-style' value='none' />
+                    <format attr='border-width' value='0' />
+                    <format attr='margin' value='4' />
+                    <format attr='padding' value='0' />
+                  </zone-style>
+                </zone>
                 <zone fixed-size='280' h='25143' id='9' is-fixed='true' name='Global Yearly Average Temperature' w='42402' x='42932' y='24857'>
+                  <zone-style>
+                    <format attr='border-color' value='#000000' />
+                    <format attr='border-style' value='none' />
+                    <format attr='border-width' value='0' />
+                    <format attr='margin' value='4' />
+                    <format attr='padding' value='0' />
+                  </zone-style>
+                </zone>
+                <zone fixed-size='280' h='21500' id='66' is-fixed='true' name='Dynamic Date Label (2)' show-title='false' w='33333' x='62200' y='49714'>
                   <zone-style>
                     <format attr='border-color' value='#000000' />
                     <format attr='border-style' value='none' />
@@ -8146,7 +8164,7 @@
           <zoom type='entire-view' />
         </viewpoint>
       </viewpoints>
-      <active id='58' />
+      <active id='57' />
       <simple-id uuid='{D86BED8A-20B9-47CA-B2C2-6AC5F0C3BA54}' />
     </window>
     <window class='worksheet' name='Dynamic Date Label'>

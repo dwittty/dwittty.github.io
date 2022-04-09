@@ -74,20 +74,7 @@ function buildBubbleChart(){
     })
 
 
-    function ready(error, datapoints){
-        console.log(datapoints)
-        
-        var tooltip = d3.select("body")
-            .append("div")
-            .style("position", "absolute")
-            .style("z-index", "10")
-            .style("visibility", "hidden")
-            .text("a simple tooltip");
-        var tooltip = d3.select("div.tooltip.mouse")
-        var SVGexactTip = d3.select("g.tooltip.exact");
-        var SVGmouseTip = d3.select("g.tooltip.mouse");
-        var HTMLmouseTip = d3.select("div.tooltip.mouse")
-
+    function ready(error, datapoints){        
         var circles = svg.selectAll(".country")
         .data(datapoints)
         .enter().append("circle")
@@ -106,14 +93,21 @@ function buildBubbleChart(){
         })           
         .on('click', function(){
             toggleAction(this)
-        })
-        .on("mouseover", function(d){tooltip.text(d); return tooltip.style("visibility", "visible");})
-            .on("mousemove", function(event){                    
-                return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");
-            })
-            .on("mouseout", function(){
-                return tooltip.style("visibility", "hidden");
-            });
+        })        
+        .on("mouseover", function(d) {            
+            console.log(this)
+            tooltipdivBubble.transition()		
+                .duration(200)		
+                .style("opacity", .9);		
+            tooltipdivBubble.html(this.getAttribute('name'))	 //rounded to nearest cent for formatting reasons
+                .style("left", (d.pageX) + "px")		
+                .style("top", (d.pageY - 30) + "px");	
+            })					
+        .on("mouseout", function(d) {		
+            tooltipdivBubble.transition()		
+                .duration(500)		
+                .style("opacity", 0);	
+        });
         
         defs.selectAll(".country-pattern")
         .data(datapoints)
@@ -209,5 +203,8 @@ function buildBubbleChart(){
     } 
         
 }
+    
 
-
+var tooltipdivBubble = d3.select("body").append("div")	
+    .attr("class", "tooltipBubble")				
+    .style("opacity", 0)

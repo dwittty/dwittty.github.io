@@ -106,10 +106,7 @@ function update(new_data) {
         // elements that aren't associated with data
         (exit) => exit.remove()
     )
-        .on("mouseover", function(d) {
-            console.log(d)	
-            var mousePos = d3.pointer(d);
-            console.log(mousePos)
+        .on("mouseover", function(d) {            
             div.transition()		
                 .duration(200)		
                 .style("opacity", .9);		
@@ -135,5 +132,5 @@ function update(new_data) {
 }
 
 var div = d3.select("body").append("div")	
-    .attr("class", "tooltip")				
+    .attr("class", "tooltip")	    			
     .style("opacity", 0);

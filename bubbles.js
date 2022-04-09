@@ -104,8 +104,8 @@ function buildBubbleChart(){
         .attr("fill", function(d){
             return "url(#" + d[0].replace(/ /g, "-") + ")"
         })           
-        .on('click', function(d){
-            console.log(d)
+        .on('click', function(){
+            toggleAction(this)
         })
         .on("mouseover", function(d){tooltip.text(d); return tooltip.style("visibility", "visible");})
             .on("mousemove", function(event){                    
@@ -144,11 +144,34 @@ function buildBubbleChart(){
             .restart()
         })
         d3.select("#equilibrium").on("click", function() {
+            //should probably show how this is calculated more explictly but for now, move all to defect:
+            cooperateList = []
             simulation
             .force("x", forceXSplit.strength(0.05))                               
             .alphaTarget(0.5)
             .restart()
         })
+
+        
+        function toggleAction(clickedCircle){
+            let country = clickedCircle.getAttribute("name")
+            console.log(clickedCircle)
+            console.log(country)
+            console.log(cooperateList)
+            if(cooperateList.includes(country)){
+                //filter the list to remove the clicked country from cooperate list
+                const filtered_data = cooperateList.filter((d) => d !== country);
+                cooperateList = filtered_data                
+            }
+            else{
+                cooperateList.push(country)
+            }
+            simulation
+            .force("x", forceXSplit.strength(0.05))                               
+            .alphaTarget(0.5)
+            .restart()
+        }
+
 
         function ticked(){
             circles
@@ -159,12 +182,8 @@ function buildBubbleChart(){
                 return d.y
             })
         }
-    }
-
-    d3.select("#continent").on('click', function(){
-        console.log("You Clicked me")
-    })
-    
-    
+    } 
         
 }
+
+

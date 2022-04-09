@@ -4,15 +4,19 @@
       
     
 
-    function getOilPrice(){        
-        document.getElementById("currentPrice").innerHTML = "<h3>Current Price of Oil:  $" + price + "</h3>"
-        document.getElementById("cutPercentage").innerHTML = "<h3>Proposed Production Cut:  " + cutPercentage + "%</h3>"
-        document.getElementById("priceIncrease").innerHTML = "<h3>Expected Price Increase with Full Compliance:  " + increasePercentage + "%</h3>"        
+    function setUpInitialPrices(){        
+        document.getElementById("currentPrice").innerHTML = "<h4>Current Price of Oil:  $" + price + "</h4>"
+        document.getElementById("cutPercentage").innerHTML = "<h4>Proposed Production Cut:  " + cutPercentage + "%</h4>"
+        document.getElementById("priceIncrease").innerHTML = "<h4>Expected Price Increase with Full Cooperation:  " + increasePercentage + "%</h4>"        
+        document.getElementById("computedPrice").innerHTML = "<h4>New Price Based on OPEC actions:  $" + computedPrice + "</h4>"        
     }
 
-    getOilPrice()
+    
+
+    setUpInitialPrices()
     buildBubbleChart()
     buildBarChart()
 
+    
 
 })();

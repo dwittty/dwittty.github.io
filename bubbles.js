@@ -154,10 +154,7 @@ function buildBubbleChart(){
 
         
         function toggleAction(clickedCircle){
-            let country = clickedCircle.getAttribute("name")
-            console.log(clickedCircle)
-            console.log(country)
-            console.log(cooperateList)
+            let country = clickedCircle.getAttribute("name")            
             if(cooperateList.includes(country)){
                 //filter the list to remove the clicked country from cooperate list
                 const filtered_data = cooperateList.filter((d) => d !== country);
@@ -170,8 +167,32 @@ function buildBubbleChart(){
             .force("x", forceXSplit.strength(0.1))                               
             .alphaTarget(0.5)
             .restart()
+            
+            setCalculatedOilPrice()
         }
 
+        function setCalculatedOilPrice(){        
+            let cooperativeProductionFraction = getCooperativeProduction()            
+            computedPrice = price + (cooperativeProductionFraction * increasePercentage)
+            //round to nearest cent for dollar formatting:
+            computedPrice = Math.round(computedPrice*100)/100
+            document.getElementById("computedPrice").innerHTML = "<h4>New Price Based on OPEC actions:  $" + computedPrice + "</h4>"        
+
+        }
+    
+        function getCooperativeProduction(){
+            let totalProductionCapacity = 0
+            let cooperativeProduction = 0
+            for(let i = 0; i < countryData.length; i++){
+                totalProductionCapacity += parseFloat(countryData[i].Production, 10)
+                if(cooperateList.includes(countryData[i].Country)){
+                    cooperativeProduction += parseFloat(countryData[i].Production, 10)
+                }
+            }
+            return cooperativeProduction/totalProductionCapacity
+        }
+
+        
 
         function ticked(){
             circles

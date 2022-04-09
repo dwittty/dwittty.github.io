@@ -26,8 +26,6 @@ function buildBarChart(){
     .text("Nation")
     .attr("transform", "rotate(-90)");
 
-    console.log("Price" + price)
-
     // Group used to enforce margin
     const g = svg.append('g')
     .attr('transform', `translate(${margin.left},${margin.top})`);
@@ -65,8 +63,7 @@ function buildBarChart(){
     computeRevenue()
     update(barChartCountryData)
 
-    function computeRevenue(){
-        console.log(countryData.length)
+    function computeRevenue(){        
         for(var i = 0; i < countryData.length; i++){            
             var revenue = countryData[i].Production * computedPrice                        
             if(cooperateList.includes(countryData[i].Country)){
@@ -81,29 +78,6 @@ function buildBarChart(){
         //update the scales
         console.log("The data:")
         console.log(new_data)  
-
-        // yearlyHighestPaid = []  
-        // for(var i = 0; i < years.length; i++){
-        //         var athletesByYear = new_data.filter((d) => d.Year === years[i]);
-        //         highestEarner = {};
-        //         highSalary = 0;
-        //         for(var j=0; j < athletesByYear.length; j++){
-                    
-        //             if(parseFloat(athletesByYear[j].Earnings) > parseFloat(highSalary)){
-        //                 highestEarner = athletesByYear[j]
-        //                 highSalary = athletesByYear[j].Earnings            
-        //             }
-        //         }
-        //         if(highSalary === 0){
-        //             highestEarner = {"Name":"DummyVal", "Year": years[i], "Earnings": 0}
-        //         }        
-        //         yearlyHighestPaid.push(highestEarner)
-        //         highSalary = 0;        
-        // }
-        // console.log(yearlyHighestPaid)
-        // new_data = yearlyHighestPaid
-        // console.log(new_data)  
-        // console.log(new_data[1].Earnings)  
 
         xscale.domain([0, Math.max.apply(Math, new_data.map(function(o) {return (Math.floor(o.Revenue/100)+1)*100}))]);
         yscale.domain(new_data.map((d) => d.Country));

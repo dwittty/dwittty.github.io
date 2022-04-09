@@ -142,6 +142,7 @@ function buildBubbleChart(){
             simulation.force("y", d3.forceY(height/2).strength(0.05))
             .alphaTarget(0.5)
             .restart()
+            recompute()
         })
         d3.select("#equilibrium").on("click", function() {
             //should probably show how this is calculated more explictly but for now, move all to defect:
@@ -150,6 +151,7 @@ function buildBubbleChart(){
             .force("x", forceXSplit.strength(0.05))                               
             .alphaTarget(0.5)
             .restart()
+            recompute()
         })
 
         
@@ -169,6 +171,7 @@ function buildBubbleChart(){
             .restart()
             
             setCalculatedOilPrice()
+            recompute()
         }
 
         function setCalculatedOilPrice(){        
@@ -190,9 +193,7 @@ function buildBubbleChart(){
                 }
             }
             return cooperativeProduction/totalProductionCapacity
-        }
-
-        
+        }        
 
         function ticked(){
             circles

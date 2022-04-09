@@ -137,7 +137,7 @@ function buildBarChart(){
                     .style("opacity", .9);		
                 div	.html(this.__data__.Country + "<br/>"  + this.__data__.Revenue)	
                     .style("left", (d.clientX-30) + "px")		
-                    .style("top", (d.clientY) + "px");	
+                    .style("top", (d.clientY+150) + "px");	
                 })					
             .on("mouseout", function(d) {		
                 div.transition()		

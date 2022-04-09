@@ -107,14 +107,15 @@ function update(new_data) {
         (exit) => exit.remove()
     )
         .on("mouseover", function(d) {
-            console.log(this.__data__)	
             console.log(d)	
+            var mousePos = d3.pointer(d);
+            console.log(mousePos)
             div.transition()		
                 .duration(200)		
                 .style("opacity", .9);		
-            div	.html(this.__data__.Country + "<br/>"  + "$"+ Math.round(this.__data__.Revenue*100)/100)	 //rounded to nearest cent for formatting reasons
-                .style("left", (d.clientX-30) + "px")		
-                .style("top", (d.clientY+150) + "px");	
+            div.html(this.__data__.Country + "<br/>"  + "$"+ Math.round(this.__data__.Revenue*100)/100)	 //rounded to nearest cent for formatting reasons
+                .style("left", (d.pageX) + "px")		
+                .style("top", (d.pageY - 30) + "px");	
             })					
         .on("mouseout", function(d) {		
             div.transition()		

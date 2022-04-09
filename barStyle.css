@@ -10,6 +10,7 @@ rect {
 rect:hover {
   fill-opacity: 1;
 }
+
 .axis {
   font-size: smaller;
 }

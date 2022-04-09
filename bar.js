@@ -12,10 +12,10 @@ function buildBarChart(){
     
     svg.append("text")
     .attr("class", "x label")
-    .attr("text-anchor", "end")
+    .attr("text-anchor", "end")    
     .attr("x", width -120)
-    .attr("y", height - 790)
-    .text("Earnings by top player (millions)");
+    .attr("y", height - 785)
+    .text("Revenue from daily oil production (millions)");
 
     svg.append("text")
     .attr("class", "y label")
@@ -37,8 +37,8 @@ function buildBarChart(){
     let currentData; 
 
     // Scales setup
-    const xscale = d3.scaleLinear().range([0, width]);
-    const yscale = d3.scaleBand().rangeRound([0, height]).paddingInner(0.1);
+    const xscale = d3.scaleLinear().range([0, width*.8]);
+    const yscale = d3.scaleBand().rangeRound([0, height*.9]).paddingInner(0.1);
 
     // Axis setup
     const xaxis = d3.axisTop().scale(xscale); 
@@ -105,7 +105,7 @@ function buildBarChart(){
         // console.log(new_data)  
         // console.log(new_data[1].Earnings)  
 
-        xscale.domain([0, Math.max.apply(Math, new_data.map(function(o) {return o.Revenue}))]);
+        xscale.domain([0, Math.max.apply(Math, new_data.map(function(o) {return (Math.floor(o.Revenue/100)+1)*100}))]);
         yscale.domain(new_data.map((d) => d.Country));
         //render the axis
         g_xaxis.transition().call(xaxis);

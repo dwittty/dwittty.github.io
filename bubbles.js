@@ -151,6 +151,8 @@ function buildBubbleChart(){
             .force("x", forceXSplit.strength(0.05))                               
             .alphaTarget(0.5)
             .restart()
+
+            setCalculatedOilPrice()
             recompute()
         })
 

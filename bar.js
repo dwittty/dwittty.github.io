@@ -112,7 +112,7 @@ function update(new_data) {
             div.transition()		
                 .duration(200)		
                 .style("opacity", .9);		
-            div	.html(this.__data__.Country + "<br/>"  + this.__data__.Revenue)	
+            div	.html(this.__data__.Country + "<br/>"  + "$"+ Math.round(this.__data__.Revenue*100)/100)	 //rounded to nearest cent for formatting reasons
                 .style("left", (d.clientX-30) + "px")		
                 .style("top", (d.clientY+150) + "px");	
             })					

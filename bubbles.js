@@ -167,7 +167,7 @@ function buildBubbleChart(){
                 cooperateList.push(country)
             }
             simulation
-            .force("x", forceXSplit.strength(0.05))                               
+            .force("x", forceXSplit.strength(0.1))                               
             .alphaTarget(0.5)
             .restart()
         }

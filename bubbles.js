@@ -1,10 +1,10 @@
 
 function buildBubbleChart(){
     var width = 1200;
-    var height = 800;        
-    var svg = d3.select("#svg_bubble")        
+    var height = 800;
+    var svg = d3.select("#svg_bubble")
     .attr("height", height)
-    .attr("width", width)             
+    .attr("width", width)
     .append("g")
     .attr("transform", "translate(0,0)")
 
@@ -13,9 +13,9 @@ function buildBubbleChart(){
         .text("Cooperate")
     actionlabels.append("div")
         .text("Defect")
-            
+
     var defs = svg.append("defs");
-    
+
     defs.append("pattern")
     .attr("id", "algeria")
     .attr("height", "100%")
@@ -29,21 +29,21 @@ function buildBubbleChart(){
     .attr("xlink:href", "Flags/Algeria.png")
 
 
-    var radiusScale = d3.scaleSqrt().domain([0.21,10.46]).range([10,120])        
+    var radiusScale = d3.scaleSqrt().domain([0.21,10.46]).range([10,120])
     var forceX = d3.forceX(function(d){
-        return width /2 
+        return width /2
     }).strength(0.05)
     var forceY = d3.forceY(function(d){
-            return height /2 
+            return height /2
         }).strength(0.05)
     var forceXSplit = d3.forceX(function(d){
-            if(cooperateList.includes(d[0])){                
+            if(cooperateList.includes(d[0])){
                 return width/4
             }
             else{
                 return 3*width/4
-            } 
-        }).strength(0.05)        
+            }
+        }).strength(0.05)
     var forceCollide = d3.forceCollide(function(d){
         return radiusScale(d[1])
     })
@@ -57,14 +57,14 @@ function buildBubbleChart(){
 
     var promises = []
     //promises.push(d3.csv("ChessRating.csv"))
-    
+
     promises.push(countryData)
     Promise.all(promises)
     .then(function(values){
         console.log(values[0])
         data = values[0]
-        countryCount = {}            
-        for(var i = 0; i < data.length; i++){  
+        countryCount = {}
+        for(var i = 0; i < data.length; i++){
             countryCount[data[i].Country] = data[i].Production
         }
         console.log(countryCount)
@@ -74,45 +74,44 @@ function buildBubbleChart(){
     })
 
 
-    function ready(error, datapoints){        
+    function ready(error, datapoints){
         var circles = svg.selectAll(".country")
         .data(datapoints)
         .enter().append("circle")
-        .attr("class", "country")            
+        .attr("class", "country")
         .attr("name", function(d){
             return d[0]
-        })            
+        })
         .attr("r", function(d){
-            var value = parseFloat(d[1],10);                
+            var value = parseFloat(d[1],10);
             value = Math.ceil(value)
-            console.log(value)
             return radiusScale(d[1])
         })
         .attr("fill", function(d){
             return "url(#" + d[0].replace(/ /g, "-") + ")"
-        })           
+        })
         .on('click', function(){
             toggleAction(this)
-        })        
-        .on("mouseover", function(d) {            
+        })
+        .on("mouseover", function(d) {
             console.log(this)
-            tooltipdivBubble.transition()		
-                .duration(200)		
-                .style("opacity", .9);		
+            tooltipdivBubble.transition()
+                .duration(200)
+                .style("opacity", .9);
             tooltipdivBubble.html(this.getAttribute('name'))	 //rounded to nearest cent for formatting reasons
-                .style("left", (d.pageX) + "px")		
-                .style("top", (d.pageY - 30) + "px");	
-            })					
-        .on("mouseout", function(d) {		
-            tooltipdivBubble.transition()		
-                .duration(500)		
-                .style("opacity", 0);	
+                .style("left", (d.pageX) + "px")
+                .style("top", (d.pageY - 30) + "px");
+            })
+        .on("mouseout", function(d) {
+            tooltipdivBubble.transition()
+                .duration(500)
+                .style("opacity", 0);
         });
-        
+
         defs.selectAll(".country-pattern")
         .data(datapoints)
         .enter().append("pattern")
-        .attr("class", "country-pattern")            
+        .attr("class", "country-pattern")
         .attr("id", function(d){
             return d[0].replace(/ /g, "-")
         })
@@ -130,7 +129,7 @@ function buildBubbleChart(){
 
         simulation.nodes(datapoints)
         .on('tick', ticked)
-        
+
         d3.select("#reset").on("click", function() {
             simulation.force("x", d3.forceX(width/2).strength(0.05))
             simulation.force("y", d3.forceY(height/2).strength(0.05))
@@ -142,7 +141,7 @@ function buildBubbleChart(){
             //should probably show how this is calculated more explictly but for now, move all to defect:
             cooperateList = []
             simulation
-            .force("x", forceXSplit.strength(0.05))                               
+            .force("x", forceXSplit.strength(0.05))
             .alphaTarget(0.5)
             .restart()
 
@@ -150,35 +149,35 @@ function buildBubbleChart(){
             recompute()
         })
 
-        
+
         function toggleAction(clickedCircle){
-            let country = clickedCircle.getAttribute("name")            
+            let country = clickedCircle.getAttribute("name")
             if(cooperateList.includes(country)){
                 //filter the list to remove the clicked country from cooperate list
                 const filtered_data = cooperateList.filter((d) => d !== country);
-                cooperateList = filtered_data                
+                cooperateList = filtered_data
             }
             else{
                 cooperateList.push(country)
             }
             simulation
-            .force("x", forceXSplit.strength(0.1))                               
+            .force("x", forceXSplit.strength(0.1))
             .alphaTarget(0.5)
             .restart()
-            
+
             setCalculatedOilPrice()
             recompute()
         }
 
-        function setCalculatedOilPrice(){        
-            let cooperativeProductionFraction = getCooperativeProduction()            
+        function setCalculatedOilPrice(){
+            let cooperativeProductionFraction = getCooperativeProduction()
             computedPrice = price + (cooperativeProductionFraction * increasePercentage)
             //round to nearest cent for dollar formatting:
             computedPrice = Math.round(computedPrice*100)/100
-            document.getElementById("computedPrice").innerHTML = "<h4>New Price Based on OPEC actions:  $" + computedPrice + "</h4>"        
+            document.getElementById("computedPrice").innerHTML = computedPrice
 
         }
-    
+
         function getCooperativeProduction(){
             let totalProductionCapacity = 0
             let cooperativeProduction = 0
@@ -189,7 +188,7 @@ function buildBubbleChart(){
                 }
             }
             return cooperativeProduction/totalProductionCapacity
-        }        
+        }
 
         function ticked(){
             circles
@@ -200,11 +199,20 @@ function buildBubbleChart(){
                 return d.y
             })
         }
-    } 
-        
-}
-    
+    }
 
-var tooltipdivBubble = d3.select("body").append("div")	
-    .attr("class", "tooltipBubble")				
+}
+
+
+var tooltipdivBubble = d3.select("body").append("div")
+    .attr("class", "tooltipBubble")
     .style("opacity", 0)
+
+
+// function computeEquilibrium(){
+//     var equilibriumState = []
+//     var initialState = [0,0,0,0,0,0,0,0,0,0,0,0,0]
+//     for (i = 0; i < initialState.length; i++){
+
+//     }
+// }

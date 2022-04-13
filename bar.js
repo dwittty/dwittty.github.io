@@ -7,7 +7,13 @@ function buildBarChart(){
 }
 
 
-function recompute(){    
+function recompute(){     
+    cutPercentage = document.getElementById("cutPercentage").value
+    increasePercentage = document.getElementById("priceIncrease").value  
+
+    console.log("Cut:" + cutPercentage)    
+    console.log("Increase:" + increasePercentage)    
+    
     computeRevenue()
     sortData(barChartCountryData)
     update(barChartCountryData)

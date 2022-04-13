@@ -3,17 +3,26 @@
     <head>
         <meta charset="utf-8">        
         <link rel="stylesheet" href="barStyle.css">
-        <link rel="stylesheet" href="bubbleStyle.css">        
+        <link rel="stylesheet" href="bubbleStyle.css">     
+        <link rel="stylesheet" href="generalStyles.css">   
     </head>
-    <body>         
+    <body>                 
         <script type="text/javascript" src="https://d3js.org/d3.v7.min.js"></script>
     
         <h2 style="text-align:center;">OPEC Member Nations: Prisoner's Dilemma</h2>
-        <div>
-            <div id="currentPrice" style="margin-right: 30px;"></div>
-            <div id="cutPercentage" style="margin-right: 30px;"></div>
-            <div id="priceIncrease" style="margin-right: 30px;"></div>
-            <div id="computedPrice" style="margin-right: 30px;"></div>
+        
+        <div class="settings">
+            <label>Current Price of Oil </label>
+            <span id="currentPrice"></span>
+
+            <label>Proposed Production Cut (%)</label>
+            <input id="cutPercentage" class="cut" type="number" value="12" min="1" max="100" oninput="recompute()"/>
+
+            <label>Expected Price Increase with Full Cooperation (%)</label>
+            <input id="priceIncrease" type="number" value="30" min="1" max="1000" oninput="recompute()"/>
+
+            <label>New Price Based on OPEC actions</label>
+            <span id="computedPrice"></span>
         </div>
         <div class="container">            
             <div class="button-wrapper">
@@ -56,6 +65,7 @@
         </div>   
         
         <script type="text/javascript">
+            var latestPriceDate = ""
             var price = 100            
             var cutPercentage = 12
             var increasePercentage = 30
@@ -74,7 +84,7 @@
                         {"Country": "Saudi Arabia", "Reserves":"266", "Production":"10.46"},
                         {"Country": "United Arab Emirates", "Reserves":"97", "Production":"3.1"},
                         {"Country": "Venezuela", "Reserves":"299", "Production":"2.27"}]
-            var barChartCountryData = []
+            var barChartCountryData = []            
         </script>                         
         <script type="text/javascript" src="bar.js"></script>    
         <script type="text/javascript" src="bubbles.js"></script>

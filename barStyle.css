@@ -1,8 +1,8 @@
-body {
+/* body {
   width: 800px;
   margin: 25px auto;
   font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
-}
+} */
 rect {
   fill: rgb(180, 132, 70);
   fill-opacity: 0.8;

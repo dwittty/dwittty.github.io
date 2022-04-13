@@ -60,16 +60,13 @@ function buildBubbleChart(){
 
     promises.push(countryData)
     Promise.all(promises)
-    .then(function(values){
-        console.log(values[0])
+    .then(function(values){        
         data = values[0]
         countryCount = {}
         for(var i = 0; i < data.length; i++){
             countryCount[data[i].Country] = data[i].Production
-        }
-        console.log(countryCount)
-        countryCountArray = Object.entries(countryCount)
-        console.log(countryCountArray)
+        }        
+        countryCountArray = Object.entries(countryCount)        
         ready(null, countryCountArray)
     })
 
@@ -93,8 +90,7 @@ function buildBubbleChart(){
         .on('click', function(){
             toggleAction(this)
         })
-        .on("mouseover", function(d) {
-            console.log(this)
+        .on("mouseover", function(d) {            
             tooltipdivBubble.transition()
                 .duration(200)
                 .style("opacity", .9);
@@ -139,14 +135,14 @@ function buildBubbleChart(){
         })
         d3.select("#equilibrium").on("click", function() {
             //should probably show how this is calculated more explictly but for now, move all to defect:
-            cooperateList = []
+            cooperateList = computeEquilibrium()            
             simulation
             .force("x", forceXSplit.strength(0.05))
             .alphaTarget(0.5)
             .restart()
-
             setCalculatedOilPrice()
             recompute()
+            
         })
 
 
@@ -187,6 +183,8 @@ function buildBubbleChart(){
                     cooperativeProduction += parseFloat(countryData[i].Production, 10)
                 }
             }
+            console.log("Cooperative Capacity: " + cooperativeProduction)
+            console.log("Total Capacity: " + totalProductionCapacity)
             return cooperativeProduction/totalProductionCapacity
         }
 
@@ -209,10 +207,43 @@ var tooltipdivBubble = d3.select("body").append("div")
     .style("opacity", 0)
 
 
-// function computeEquilibrium(){
-//     var equilibriumState = []
-//     var initialState = [0,0,0,0,0,0,0,0,0,0,0,0,0]
-//     for (i = 0; i < initialState.length; i++){
+function computeEquilibrium(){
+    let copyOfCountryData = countryData
+    let possibleCooperators = []
+    let cooperationArray = []
+    for(var i = 0; i < countryData.length; i++) {
+        cooperationArray.push(0)
+    }
 
-//     }
-// }
+    for(var i = 0; i < countryData.length; i++){
+        let tempArray = cooperationArray
+        let baselineRatio = getCooperativeProductioByArray(tempArray)
+        tempArray[i] = 1
+        cooperateRatio = getCooperativeProductioByArray(tempArray)
+        let baselinePrice = price + (baselineRatio * increasePercentage)
+        let cooperatePrice = price + (cooperateRatio * increasePercentage)
+        let baselineRevenue = countryData[i].Production * baselinePrice
+        let cooperateRevenue = countryData[i].Production * cooperatePrice * (1-cutPercentage/100)
+        console.log(cooperateRevenue - baselineRevenue)
+        if(cooperateRevenue > baselineRevenue){
+            possibleCooperators.push(countryData[i].Country)
+        }
+    }
+    console.log("Possible cooperators: " + possibleCooperators)
+    return possibleCooperators
+ }
+
+function getCooperativeProductioByArray(cooperationArray){    
+    let totalProductionCapacity = 0
+    let cooperativeProduction = 0
+
+    for(let i = 0; i < countryData.length; i++){
+        totalProductionCapacity += parseFloat(countryData[i].Production, 10)
+        if(cooperationArray[i] == 1){            
+            cooperativeProduction += parseFloat(countryData[i].Production, 10)
+        }
+    }
+    console.log("Cooperative Capacity: " + cooperativeProduction)
+    console.log("Total Capacity: " + totalProductionCapacity)
+    return cooperativeProduction/totalProductionCapacity
+}

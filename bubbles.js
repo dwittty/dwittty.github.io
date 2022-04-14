@@ -208,32 +208,86 @@ var tooltipdivBubble = d3.select("body").append("div")
 
 
 function computeEquilibrium(){
-    let copyOfCountryData = countryData
-    let possibleCooperators = []
-    let cooperationArray = []
-    for(var i = 0; i < countryData.length; i++) {
-        cooperationArray.push(0)
-    }
 
-    for(var i = 0; i < countryData.length; i++){
-        let tempArray = cooperationArray
-        let baselineRatio = getCooperativeProductioByArray(tempArray)
-        tempArray[i] = 1
-        cooperateRatio = getCooperativeProductioByArray(tempArray)
-        let baselinePrice = price + (baselineRatio * increasePercentage)
-        let cooperatePrice = price + (cooperateRatio * increasePercentage)
-        let baselineRevenue = countryData[i].Production * baselinePrice
-        let cooperateRevenue = countryData[i].Production * cooperatePrice * (1-cutPercentage/100)
-        console.log(cooperateRevenue - baselineRevenue)
-        if(cooperateRevenue > baselineRevenue){
-            possibleCooperators.push(countryData[i].Country)
-        }
+    let guaranteedCooperators = []    
+    let possibleCooperators = []
+    let previousLength = -1   
+    let currentLength = 0
+    while(currentLength > previousLength)
+    {
+        let cooperationArray = []        
+        for(var i = 0; i < countryData.length; i++) {
+            if(guaranteedCooperators.some(e => e.index === i)){
+                cooperationArray.push(1)    
+            }
+            else{
+                cooperationArray.push(0)
+            }
+        }       
+        console.log("cooperationArray")
+        console.log(cooperationArray)
+        possibleCooperators= getPossibleCooperators(cooperationArray, guaranteedCooperators)
+        console.log("possibleCooperators")
+        console.log(possibleCooperators)    
+        cooperateDominant = checkIfCooperationIsDominantStrategy(possibleCooperators)
+        for(var i = 0; i < cooperateDominant.length; i++){
+            if(guaranteedCooperators.some(e => e.index === cooperateDominant[i].index)){
+                //do nothing, it's already in the list
+            }
+            else{ 
+                //add it to the list
+                guaranteedCooperators.push(cooperateDominant[i])
+            }
+        }   
+        console.log(currentLength)
+        console.log(previousLength)
+        console.log(guaranteedCooperators)
+        previousLength = currentLength
+        currentLength = guaranteedCooperators.length
     }
-    console.log("Possible cooperators: " + possibleCooperators)
-    return possibleCooperators
+    return guaranteedCooperators.map(x => x.Country)       
  }
 
-function getCooperativeProductioByArray(cooperationArray){    
+ 
+ // cooperation is most valuable (relatively speaking) when all other countries defect; 
+ // under these conditions, would a country choose to cooperate? If not, cooperation is a dominated strategy for that country
+function getPossibleCooperators(cooperationArray, guaranteedCooperators){
+    let possibleCooperators = []
+
+    for(var i = 0; i < countryData.length; i++){      
+        //guaranteed cooperators are always possible cooperators, just add them to the list and move on
+        if(guaranteedCooperators.some(x => x.index === i)){
+            possibleCooperators.push({"Country": countryData[i].Country, "index" : i})
+            continue;
+        }  
+
+        console.log(increasePercentage)
+
+        let tempArray = [...cooperationArray] //deep copy of array so cooperationArray is unaffected by modifications
+        
+        let defectRatio = getCooperativeProductionRatioByArray(tempArray) //ratio with all defecting
+        let defectPrice = price + (defectRatio * increasePercentage)
+        let defectRevenue = countryData[i].Production * defectPrice
+        
+        tempArray[i] = 1   //assign one cooperator
+        
+        let cooperateRatio = getCooperativeProductionRatioByArray(tempArray)  //ratio with one cooperator        
+        let cooperatePrice = price + (cooperateRatio * increasePercentage)        
+        let cooperateRevenue = countryData[i].Production * cooperatePrice * (1-cutPercentage/100)        
+
+        
+        log = cooperateRevenue - defectRevenue
+        console.log(countryData[i].Country + " " + log)
+        if(cooperateRevenue >= defectRevenue){
+            possibleCooperators.push({"Country": countryData[i].Country, "index" : i})
+        }
+    }
+    
+    return possibleCooperators
+}
+
+ //pass in an array of length countryData.length; 0 = defection, 1 = cooperation
+function getCooperativeProductionRatioByArray(cooperationArray){    
     let totalProductionCapacity = 0
     let cooperativeProduction = 0
 
@@ -242,8 +296,53 @@ function getCooperativeProductioByArray(cooperationArray){
         if(cooperationArray[i] == 1){            
             cooperativeProduction += parseFloat(countryData[i].Production, 10)
         }
-    }
-    console.log("Cooperative Capacity: " + cooperativeProduction)
-    console.log("Total Capacity: " + totalProductionCapacity)
+    }    
     return cooperativeProduction/totalProductionCapacity
 }
+
+//if all possible cooperators choose to cooperate, is cooperation still a dominant choice? 
+function checkIfCooperationIsDominantStrategy(possibleCooperators){
+    let dominantStrategy = []
+    let cooperationArray = []
+     //create array of length countryData.length. Initialize nonpossible cooperators to 0, initialize possible cooperators to 1
+    for(var i = 0; i < countryData.length; i++) {
+        if(possibleCooperators.some(e => e.index === i)){
+            cooperationArray.push(1)    
+        }
+        else {
+            cooperationArray.push(0)
+        }
+    }    
+
+    for(var i=0; i < possibleCooperators.length; i++){
+        let countryIndex = possibleCooperators[i].index
+        console.log("country: " + countryData[possibleCooperators[i].index].Country)        
+
+        let tempArray = [...cooperationArray] //deep copy of array so cooperationArray is unaffected by modifications
+        
+        let cooperateRatio = getCooperativeProductionRatioByArray(tempArray)  //ratio with all possible cooperators coopearting
+        let cooperatePrice = price + (cooperateRatio * increasePercentage)
+        let cooperateRevenue = countryData[countryIndex].Production * cooperatePrice * (1-cutPercentage/100)  //baseline is cooperation this time       
+        
+        tempArray[countryIndex] = 0 //set one possible cooperator to defect
+        
+        defectRatio = getCooperativeProductionRatioByArray(tempArray) //ratio with the one defector         
+        let defectPrice = price + (defectRatio * increasePercentage)        
+        let defectRevenue = countryData[countryIndex].Production * defectPrice 
+
+        // console.log("cooperateRatio: " + cooperateRatio)
+        // console.log("cooperatePrice: " + cooperatePrice)
+        // console.log("cooperateRevenue: " + cooperateRevenue)        
+        // console.log("defectRatio: " + defectRatio)
+        // console.log("defectPrice: " + defectPrice)              
+        // console.log("defectRevenue:" + defectRevenue)
+        if(cooperateRevenue > defectRevenue){
+            console.log("DOMINANT")
+            dominantStrategy.push(possibleCooperators[i])
+        }
+    }
+    console.log("Cooperation is a dominant strategy:")
+    console.log(dominantStrategy)
+    return dominantStrategy
+}
+

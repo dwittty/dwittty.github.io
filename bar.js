@@ -84,10 +84,7 @@ function sortData(data){
 }
 
 function update(new_data) {
-    //update the scales
-    console.log("The data:")
-    console.log(new_data)  
-
+    //update the scales   
     xscale.domain([0, Math.max.apply(Math, new_data.map(function(o) {return (Math.floor(o.Revenue/100)+1)*100}))]);
     yscale.domain(new_data.map((d) => d.Country));
     //render the axis

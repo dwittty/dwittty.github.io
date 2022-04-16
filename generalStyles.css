@@ -4,9 +4,31 @@ div.settings {
     display:grid;
     grid-template-columns: max-content max-content;
     grid-gap:5px;
+    font-size: xx-large;
 }
 div.settings label       { text-align:right; }
 div.settings label:after { content: ":"; }
 div.settings input {
     width:50px;        
+    font-size: xx-large;
 }
+
+a.button{
+    display:inline-block;
+    padding:0.3em 1.2em;
+    margin:0 0.3em 0.3em 0;
+    border-radius:2em;
+    box-sizing: border-box;
+    text-decoration:none;
+    font-family:'Roboto',sans-serif;
+    font-weight:300;
+    color:#FFFFFF;
+    background-color:#4eb5f1;
+    text-align:center;
+    transition: all 0.2s;
+    font-size: 32px;
+}
+a.button:hover{
+    background-color:#4095c6;
+}
+ 

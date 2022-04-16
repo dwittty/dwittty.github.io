@@ -13,15 +13,19 @@
                 console.log(data.series[0].data[0])
                 let latestData = data.series[0].data[0]
                 price = latestData[1] //newest price available in the API
+                console.log(latestData)
+                console.log(price)
                 document.getElementById("currentPrice").innerHTML = price
+                document.getElementById("computedPrice").innerHTML = price        
             })
             .catch(function(error){
                 console.log("Encountered an error:")
                 console.log(error)
                 document.getElementById("currentPrice").innerHTML = 100
+                document.getElementById("computedPrice").innerHTML = 100        
             });        
         
-        document.getElementById("computedPrice").innerHTML = price        
+        
     }
 
     setUpInitialPrices()

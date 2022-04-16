@@ -131,6 +131,11 @@ function buildBubbleChart(){
             simulation.force("y", d3.forceY(height/2).strength(0.05))
             .alphaTarget(0.5)
             .restart()
+            
+            document.getElementById("computedPrice").innerHTML = price
+            document.getElementById("cutPercentage").value = 12
+            document.getElementById("priceIncrease").value = 30            
+            var cooperateList = [] 
             recompute()
         })
         d3.select("#equilibrium").on("click", function() {

@@ -172,7 +172,7 @@ function buildBubbleChart(){
 
         function setCalculatedOilPrice(){
             let cooperativeProductionFraction = getCooperativeProduction()
-            computedPrice = price + (cooperativeProductionFraction * increasePercentage)
+            computedPrice = price * (1 +cooperativeProductionFraction * increasePercentage/100)
             //round to nearest cent for dollar formatting:
             computedPrice = Math.round(computedPrice*100)/100
             document.getElementById("computedPrice").innerHTML = computedPrice

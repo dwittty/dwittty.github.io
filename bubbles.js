@@ -291,7 +291,7 @@ function getPossibleCooperators(cooperationArray, guaranteedCooperators){
     return possibleCooperators
 }
 
- //pass in an array of length countryData.length; 0 = defection, 1 = cooperation
+ //pass in an array of 1's and 0's the same length as the countryData array; 0 = defection, 1 = cooperation
 function getCooperativeProductionRatioByArray(cooperationArray){    
     let totalProductionCapacity = 0
     let cooperativeProduction = 0
@@ -326,8 +326,8 @@ function checkIfCooperationIsDominantStrategy(possibleCooperators){
         let tempArray = [...cooperationArray] //deep copy of array so cooperationArray is unaffected by modifications
         
         let cooperateRatio = getCooperativeProductionRatioByArray(tempArray)  //ratio with all possible cooperators coopearting
-        let cooperatePrice = price + (cooperateRatio * increasePercentage)
-        let cooperateRevenue = countryData[countryIndex].Production * cooperatePrice * (1-cutPercentage/100)  //baseline is cooperation this time       
+        let cooperatePrice = price + (cooperateRatio * increasePercentage)   
+        let cooperateRevenue = countryData[countryIndex].Production * cooperatePrice * (1-cutPercentage/100)  
         
         tempArray[countryIndex] = 0 //set one possible cooperator to defect
         
@@ -346,7 +346,7 @@ function checkIfCooperationIsDominantStrategy(possibleCooperators){
             dominantStrategy.push(possibleCooperators[i])
         }
     }
-    console.log("Cooperation is a dominant strategy:")
+    console.log("Cooperation is a dominant strategy for:")
     console.log(dominantStrategy)
     return dominantStrategy
 }
